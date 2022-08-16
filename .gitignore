@@ -1,0 +1,6 @@
+.DS_Store
+trial/
+migrations/
+db.sqlite3
+*.csv
+*.swp
