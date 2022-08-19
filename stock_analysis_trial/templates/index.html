@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+  <head>
+    <title>財報鳥</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+   <link rel="stylesheet" href="/css/styles.css" type="text/css"/>
+    <style>
+      .back {
+        background-image: url("{% static "background.jpeg"%}");
+        background-repeat: no-repeat;
+        background-size: cover;
+        padding-top: 5%;
+      }
+     .flex {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+
+      .content {
+        display: flex;
+        justify-content: space-around;
+        width: 30%; /*寬度會和back一樣*/
+        margin: 1% 2%;
+        font-weight: bold;
+       }
+      .search{
+        display: flex;
+        justify-content: center;
+        height: 5vh;
+        width: 100%;
+      }
+      .search > form{
+        width: 60%;
+        transform: translate(0, -15%)
+      }
+      .search_bar{
+        height: 100%;
+        width: 80%;
+        border-radius: 5px;
+        text-align: center;
+        margin: 0;
+      }
+      .search_button {
+        height: 100%;
+        width: 10%;
+        border: none;
+        border-radius: 5px;
+        background-color: skyblue;
+      }
+      .mid_size_font{
+        font-size: 1.7rem;
+    }
+    .big_size_font{
+        font-size: 2.5rem;
+    }
+    .grid{
+        display: grid;
+        grid-template-columns: 50% 50%; /*給兩個數字就是兩個columns*/
+        grid-template-rows: 50% 50%; /*給兩個數字就是兩個columns*/
+        grid-gap: 0.3rem 1rem;
+        justify-content: center;
+        text-align: center;
+    }
+    .grid > div{
+        font-size: 1.2rem;
+    }
+    .grid p{
+        margin: 0;
+    }
+    #logo {
+        width: 45%;
+      }
+    #square{
+        padding-right: 1rem;
+        padding-left: 1rem;
+        background-color: lightgray;
+      }
+    li{
+        height: 100%;
+        float: left;
+      }
+    </style>
+  <script>
+      function gesture(condition){
+        var logo = document.getElementById('logo');  
+        if (condition == 'smile'){
+            logo.style.width = '28%';
+            logo.src = "{% static "logo_bird1.png" %}";}
+        else{
+            logo.style.width = '20%';
+            logo.src = "{% static "logo_bird0.png" %}";}
+              
+            }
+  </script>
+  </head>
+  <body style="min-height: 600px;">
+    <div style="height: 100%">
+        <div class="flex back">
+            <div class="flex" style="width: 50%; flex-direction: column">
+                <a href="/overview"><img id="logo" src="{% static "logo_bird0.png" %}"></img></a>
+                <div class="search">
+                    <form>
+                     <!--form action={#% url 'price:posted_query' %} method="POST" target="_blank"-->
+        <!--尋找name 為 price:posted_query 的這個url, post 給他 -->
+        <!--<form action="/analysis/" method="POST">-->
+                    {% csrf_token %}
+                    <input
+                class="search_bar"
+                type="text"
+                name="stock_id"
+                id="stock_code"
+                placeholder="查詢台股代碼/公司名稱"
+                list="query"
+                style="font-size: 100%;"
+                    />
+                <!--<li style="width: 8%">-->
+                <button class="search_button" type="submit"><i class="fa fa-search"></i></button>
+                <datalist id="query">
+                    {% for stock_name in stock_list %}
+                    <option value="{{stock_name}}">
+                    {% endfor %}
+                </datalist>
+                </form>
+            </div>
+        </div>
+      </div>
+      <div class="flex" style="flex-direction: column">
+          <div class="content">
+            <div class='item2 mid_size_font'>{{date}}</div>
+            <div class='item2 mid_size_font'><font color="{{trend}}">{{today_close}}</font></div>
+          </div>
+          <div class="content">
+            <div>
+                <div id=square class="big_size_font" style="background-color:{{trend_background}}"><a href="https://tw.stock.yahoo.com/" target="_blank"><font color:"black">大盤<br>行情</font></a></div>
+            </div>
+            <div class="grid">
+                <div>
+                    <p>昨收</p>
+                    <p>{{yesterday_close}}</p>
+                </div>
+                <div>
+                    <p>開盤</p>
+                    <p>{{open}}</p>
+                </div>
+                <div>
+                    <p>最高</p>
+                    <p>{{high}}</p>
+                </div>
+                <div>
+                    <p>最低</p>
+                    <p>{{low}}</p>
+                </div>
+            </div>
+          </div>
+      </div>
+    </div>
+     </body>
+</html>
