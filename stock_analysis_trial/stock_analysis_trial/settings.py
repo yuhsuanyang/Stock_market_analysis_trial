@@ -32,7 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.admin', 'django.contrib.auth',
     'django.contrib.contenttypes', 'django.contrib.sessions',
     'django.contrib.messages', 'django.contrib.staticfiles',
-    'stocks.apps.StocksConfig'
+    'stocks.apps.StocksConfig', 'price.apps.PriceConfig'
 ]
 
 MIDDLEWARE = [
@@ -102,7 +102,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'ROC'
 
 USE_I18N = True
 
@@ -119,7 +119,7 @@ STATICFILES_DIRS = [
     #    os.path.join(BASE_DIR, 'meta_data/static/'),
     os.path.join(BASE_DIR, 'static')
 ]
-print(STATIC_ROOT)
+#print(STATIC_ROOT)
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 

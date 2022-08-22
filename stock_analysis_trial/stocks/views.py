@@ -17,10 +17,17 @@ today = datetime.today()
 
 def download_punishment(compare_date):
     # 查詢處置股票
-    modify_time = os.path.getmtime(f'{ROOT}/punished.csv')
-    modify_time = time.strftime('%Y%m%d', time.localtime(modify_time))
-    if modify_time == compare_date:  #這天已經查過 不用再查了
-        return
+    if os.path.exists(f'{ROOT}/punished.csv'):
+        modify_time = os.path.getmtime(f'{ROOT}/punished.csv')
+        modify_time = time.strftime('%Y%m%d', time.localtime(modify_time))
+        if modify_time == compare_date:  #這天已經查過 不用再查了
+            return
+    else:
+        modify_time = compare_date
+        print(modify_time)
+
+
+#        modify_time = datetime.strptime(modify_time, '%Y%m%d')
     end = datetime.strptime(compare_date, '%Y%m%d') + timedelta(days=1)
     end = datetime.strftime(end, '%Y%m%d')
 
@@ -33,7 +40,7 @@ def download_punishment(compare_date):
 
 
 def get_latest_data():  # 即時爬取大盤資料
-    start_date = datetime.strftime(today - timedelta(days=1), '%Y-%m-%d')
+    start_date = datetime.strftime(today - timedelta(days=10), '%Y-%m-%d')
     end_date = datetime.strftime(today + timedelta(days=1), '%Y-%m-%d')
     print(start_date)
     print(end_date)
@@ -55,7 +62,7 @@ def main(request):
     meta_data = StockMetaData.objects.all()
     stocks = [stock.__str__() for stock in meta_data]
     data = get_latest_data()
-    #    download_punishment(today.strftime('%Y-%m-%d'))
+    download_punishment(today.strftime('%Y%m%d'))
     if data['today_close'] > data['yesterday_close']:
         trend_light = 'pink'
         trend = 'red'
