@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+{% load static %}
+{#% load plotly_dash %#}
+<html>
+  <head>
+    <title>財報鳥</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" href="/css/styles.css" type="text/css" />
+  </head>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body{
+        margin: 0;
+        min-width: 1200px;
+        min-height: 800px;
+        background-color: aliceblue;
+    }
+    a{
+        color: black;
+        text-decoration: none;
+    }
+    #nav{
+        display: flex;
+        justify-content: space-between;
+        height: 10%;
+        background-color: white;
+    }
+    #nav>div{
+        display: flex;
+        height:65px;
+    }
+    #tools{
+        gap: 10px;
+        width: 30%;
+    }
+    #tools > *{
+        height:100%;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+     }
+    #link_div{
+        width: 65%;
+        justify-content: flex-end;
+        font-weight: bold;
+        margin-right: 2%;
+    }
+    #link_div>div{
+        font-size: 1.1rem;
+        padding: calc((65px - 1.1rem)/2) 15px;
+    }
+    #link_div a{
+        padding-top: 25px;
+    }
+    #link_div>div:hover{
+        background-color: whitesmoke;
+    }
+/*    #link_div > div:first-child, #link_div > div:last-child{
+        display: none;
+    }*/
+    #basic_info{
+        display: flex;
+        flex-direction: column;
+        gap: 1%;
+        justify-content: center;
+    }
+    #contents {
+        display: flex;
+        height: 90%;
+        flex-direction: column;
+        align-items: center;
+    }
+    #contents > div{
+        width: 90%;
+        margin-top: 1%;
+    }
+    #dashboard {
+    }
+    #panel{
+        display: flex;
+        gap: 1%;
+        background-color: aliceblue;
+    }
+    #panel > div{
+        background-color: white;
+        text-align: center;
+    }
+    #title{
+        height: 10%;
+        justify-content: center;
+        background-color: white;
+        display: flex;
+    }
+    #title > div:not(.same_trade){
+        width: 40%;
+        text-align: right;
+    }
+    .icon {
+        color: lightblue;
+        font-size: 20px;
+    }
+    .logo{
+        height: 100%;
+        margin-left: 10px;
+    }
+    .icon_button{
+        margin-left: 5px;
+        border: none;
+        background-color: white;
+        font-size: 20px;
+    }
+    .search_bar{
+        background-color: aliceblue;
+        border-color: lightgray;
+        border-radius: 5px;
+        padding: 5px;
+        width: 80%;
+    }
+    .same_trade {
+      position: absolute;
+      height: 200px;
+      width: 25%;
+      top: 20%;
+      right: 15%;
+      box-shadow: #6da7a2a3 0px 5px 15px;
+      background-color: mintcream;
+      overflow: auto;
+      z-index: 1;
+      display: none;
+      
+    }
+    .same_trade ul {
+      padding: 0;
+      list-style-type: none;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+    .same_trade li {
+        width: 40%; 
+        font-size: 0.8em;
+        padding: 5%;
+        text-align: center;
+    }   
+    .same_trade li:hover {
+        background-color: paleturquoise;
+    }
+/*    @media screen and (max-width: 1300px) {
+        #link_div > div:nth-child(n+6){display: none;}
+        #link_div > div:first-child{display: block;}
+        #link_div > div:last-child{display: block;}
+    }*/
+  </style>
+  <script>
+     window.onfocus = function(){
+        window.location.reload(); }
+    window.onload = function(){
+        neighbors = []
+        links = document.querySelectorAll("#link_div div");
+        for (var i = 1; i < links.length; i++){
+                if(links[i].id == 'here'){
+                    here = i;
+                    break;
+                    }
+              }
+        console.log(here);
+        start = Math.min(here, 4);
+        neighbors = range(start, start+4);
+        if (innerWidth < 1300){
+                show_abbrev_links(neighbors);
+            }
+        }
+    function range(start, end){
+        var arr = [];
+        for (var i = start; i < end; i++){
+            arr.push(i)
+        }
+        return arr
+        }
+    function show() {
+        var x = document.getElementsByClassName("same_trade")[0];
+    //      console.log(x);
+    //      console.log(x.style.display);
+        x.style.display = (x.style.display == "block") ? "none" : "block";
+        }
+
+ //    function show_abbrev_links(name_lists){
+ //        for(var i=1; i < links.length - 1; i ++){
+ //            links[i].style.display = name_lists.includes(i) ? "block" : "none";
+ //            }
+ //        }
+ //
+ //    function turn_page(direction){
+ //        start = (direction == 1) ? (Math.min(start + 1, 4)) : (Math.max(start - 1, 1))
+ //        var new_neighbors = range(start, start+4)
+ //            show_abbrev_links(new_neighbors);
+ //        }
+ //      window.addEventListener('resize', function small_window(){
+ //          if (innerWidth < 1300){
+ //             show_abbrev_links(neighbors);}
+ //        else{show_abbrev_links(range(1, 8));}
+ //                                    })
+  </script>
+  <body>
+    <div id="nav">
+      <div id="tools">
+        <div>
+            <img class='logo' src="{% static "logo_bird0.png" %}"></img>
+          <!--<a href="/overview"><img class='logo' src="asset/logo_bird.png"></img></a>-->
+        </div>
+        <form action={% url 'price:posted_query' %} method="POST" target="_blank" >
+        {% csrf_token %}
+          <input
+            class="search_bar"
+            type="text"
+            placeholder="查詢台股代碼/公司名稱"
+            list="query"
+          />
+          <button class="icon_button" type="submit">
+            <i class="fa fa-search"></i>
+          </button>
+          <datalist id="query">
+            {% for stock_name in stock_list %}
+                <option value="{{stock_name}}">
+            {% endfor %}
+
+              <!--<option value="1101台泥">
+              <option value="1102亞泥">
+              <option value="1103嘉泥">
+              <option value="1104環泥">-->
+        </datalist>
+        </form>
+        <div>
+          <a href="/index"
+            ><button class="icon_button"><i class="fa fa-home"></i></button
+          ></a>
+        </div>
+      </div>
+      <div id='link_div'>
+              {% block link_list%}{% endblock%}  
+        </div>
+    </div>
+    <div id="contents">
+        <div id="title">
+            <div><h2>{{stock_id}}</h2></div>
+            <div id='basic_info'>
+                <div><font color="darkcyan" onclick="show()">{{industry_type}}</font></div>
+                <div>{{market_type}}日期：{{listed_date}}</div>
+            </div>
+            <div class="same_trade">
+                <ul>
+                    {% block same_trade %}{% endblock %}
+              <!--{#% for stock_name in same_trade%}
+              <li class="companies">{{stock_name}}</li>
+              {% endfor%#}-->
+                </ul>
+            </div>
+        </div>
+        <div id="panel">
+            {% block main_content %}{% endblock %}
+            <!--div id="left_section" style="width: 20%">
+                <p>開</p>
+                <p>高</p>
+                <p>低</p>
+                <p>收</p>
+            </div>
+            <div id="dashboard" style="width: 80%;">
+                <p>近90日股價走勢</p>
+            </div-->
+        </div>
+    </div>
+  </body>
+</html>
