@@ -1,6 +1,8 @@
 import pandas as pd
 from pathlib import Path
 from FinMind.data import DataLoader
+from datetime import datetime, timedelta
+from django.urls import reverse
 from django.shortcuts import render, redirect
 from stocks.models import StockMetaData
 
@@ -48,7 +50,30 @@ def query_historical_price(stock_code, start_date, end_date):
 def main(request, stock_id):
     data = {}
     info = meta_data.filter(code=stock_id)[0]
+    today = datetime.today()
+    start_date = datetime.strftime(today - timedelta(days=90), '%Y-%m-%d')
+    end_date = datetime.strftime(today + timedelta(days=1), '%Y-%m-%d')
     same_trade = meta_data.filter(industry_type=info.industry_type)
+    price_df = query_historical_price(stock_id, start_date, end_date)
+    if int(stock_id) in punished['code'].values:
+        duration = punished[punished.code == int(
+            stock_id)]['duration'].values[0].split('～')
+        data['punishment_duration'] = duration[0][4:] + '~' + duration[1][4:]
+
+    data['previous_close'] = price_df.iloc[-2]['close']
+    data['today_date'] = price_df.iloc[-1]['date']
+    for col in ['open', 'max', 'min', 'close']:
+        data[col] = price_df.iloc[-1][col]
+        data[f'{col}_highlight_color'], data[f'{col}_color'] = color(
+            data[col], data['previous_close'])
+    data['PER'] = price_df.iloc[-1]['PER']
+    data['volume'] = price_df.iloc[-1]['Trading_Volume'] / 100
+    data['updown'] = round(data['close'] - data['previous_close'], 2)
+    data['amplitude'] = round(data['updown'] * 100 / data['previous_close'], 2)
+    data['updown_color'] = [
+        c for c in [data['close_color'], data['close_highlight_color']]
+        if c != 'white'
+    ][0]
     data['stock_id'] = f"{stock_id} {info.name}"
     data['stock_info'] = info
     data['listed_date'] = info.listed_date

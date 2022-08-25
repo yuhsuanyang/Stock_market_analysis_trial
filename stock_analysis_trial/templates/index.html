@@ -102,10 +102,10 @@
             <div class="flex" style="width: 50%; flex-direction: column">
                 <a href="/overview"><img id="logo" src="{% static "logo_bird0.png" %}"></img></a>
                 <div class="search">
-                    <form>
-                     <!--form action={#% url 'price:posted_query' %} method="POST" target="_blank"-->
+                    <!--<form>-->
+                    <form action={% url 'price:posted_query' %} method="POST" target="_blank">
         <!--尋找name 為 price:posted_query 的這個url, post 給他 -->
-        <!--<form action="/analysis/" method="POST">-->
+        <!--<form action="/analysis/" method="POST-->
                     {% csrf_token %}
                     <input
                 class="search_bar"

@@ -3,4 +3,55 @@
 <div id="here"><a href="/price">近期股價</a></div>
 <div><a href="/chip">籌碼分析</a></div>
 <div><a href="/montly_revenue">月營收表</a></div>
-{% endblock %}
+{% endblock %} {% block same_trade %} {%for stock_name in same_trade%}
+<li>
+  <a href="{{stock_name.get_price_url}}" target="_blank"
+    ><font color="black">{{stock_name}}</font></a
+  >
+</li>
+{% endfor %} {% endblock %} {% block main_content %}
+<div id="left_section" , style="width: 20%">
+  <div style="margin: 15%; text-align: left">
+    <p>{{today_date}} 行情</p>
+    <p>
+      開
+      <mark
+        style="background-color:{{open_highlight_color}}; color:{{open_color}}"
+        >{{open}}</mark
+      >
+    </p>
+    <p>
+      高
+      <mark
+        style="background-color:{{max_highlight_color}}; color: {{max_color}}"
+        >{{max}}</mark
+      >
+    </p>
+    <p>
+      低
+      <mark
+        style="background-color:{{min_highlight_color}}; color: {{min_color}}"
+        >{{min}}</mark
+      >
+    </p>
+    <p>
+      收
+      <mark
+        style="background-color:{{close_highlight_color}}; color: {{close_color}}"
+        >{{close}}</mark
+      >
+    </p>
+    <p>量(張) {{volume}}</p>
+    <p>昨收 {{previous_close}}</p>
+    <p>漲跌 <font color="{{updown_color}}">{{updown}}</font></p>
+    <p>漲跌幅 <font color="{{updown_color}}">{{amplitude}}%</font></p>
+    <p />
+    <p>本益比 {{PER}}</p>
+    {% if punishment_duration %}
+    <p><mark style="background-color: black; color: white"> 處置</mark></p>
+    <p>{{punishment_duration}}</p>
+    {% endif %}
+    <div></div>
+    {% endblock %}
+  </div>
+</div>
