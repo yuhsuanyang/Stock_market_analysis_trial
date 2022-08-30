@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from django.urls import reverse
 from django.shortcuts import render, redirect
 from stocks.models import StockMetaData
-
+from .util import create_dash
 # Create your views here.
 api = DataLoader()
 
@@ -51,10 +51,14 @@ def main(request, stock_id):
     data = {}
     info = meta_data.filter(code=stock_id)[0]
     today = datetime.today()
-    start_date = datetime.strftime(today - timedelta(days=90), '%Y-%m-%d')
+    start_date = datetime.strftime(today - timedelta(days=365 * 5), '%Y-%m-%d')
     end_date = datetime.strftime(today + timedelta(days=1), '%Y-%m-%d')
     same_trade = meta_data.filter(industry_type=info.industry_type)
     price_df = query_historical_price(stock_id, start_date, end_date)
+    price_df['5MA'] = price_df['close'].rolling(5).mean()
+    price_df['20MA'] = price_df['close'].rolling(20).mean()
+    price_df['60MA'] = price_df['close'].rolling(60).mean()
+
     if int(stock_id) in punished['code'].values:
         duration = punished[punished.code == int(
             stock_id)]['duration'].values[0].split('～')
@@ -81,4 +85,10 @@ def main(request, stock_id):
     data['market_type'] = info.market_type
     data['same_trade'] = same_trade
     data['stock_list'] = meta_data
+    app = create_dash(
+        stock_id, info.name,
+        price_df.rename(columns={
+            'close': 'daily',
+            'Trading_Volume': 'volume'
+        }))
     return render(request, 'price_dashboard.html', context=data)

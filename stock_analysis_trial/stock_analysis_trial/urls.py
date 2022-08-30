@@ -22,6 +22,7 @@ from stocks.views import main
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('django_plotly_dash/', include('django_plotly_dash.urls')),
     path('index/', main, name='index'),
     path('analysis/', include('price.urls')),
     #    path('analysis/', include('chip.urls')),

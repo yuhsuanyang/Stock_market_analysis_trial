@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.admin', 'django.contrib.auth',
     'django.contrib.contenttypes', 'django.contrib.sessions',
     'django.contrib.messages', 'django.contrib.staticfiles',
+    'django_plotly_dash.apps.DjangoPlotlyDashConfig',
     'stocks.apps.StocksConfig', 'price.apps.PriceConfig'
 ]
 
@@ -119,8 +120,8 @@ STATICFILES_DIRS = [
     #    os.path.join(BASE_DIR, 'meta_data/static/'),
     os.path.join(BASE_DIR, 'static')
 ]
-#print(STATIC_ROOT)
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+X_FRAME_OPTIONS = 'SAMEORIGIN'
