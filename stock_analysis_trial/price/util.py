@@ -6,20 +6,6 @@ from django_plotly_dash import DjangoDash
 from dash.dependencies import Input, Output
 
 from dashboard_utils.common_styles import checklist_style, line_plot_style
-'''
-def create_dash(stock_code, company_name, price_df):
-    app = DjangoDash('Price_Dashboard')
-    app.layout = html.Div(
-        [html.H3(id='title', children='近90天股價走勢')],
-        style={
-            'position': 'absolute',
-            'left': '10%',
-            'width': '80%',
-            'text-align': 'center'
-        })
-    return app
-'''
-
 
 def create_dash(stock_code, company_name, price_df):
     features = ['daily', '5MA', '20MA', '60MA', 'k線']

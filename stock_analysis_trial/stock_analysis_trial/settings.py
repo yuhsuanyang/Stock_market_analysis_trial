@@ -33,7 +33,8 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes', 'django.contrib.sessions',
     'django.contrib.messages', 'django.contrib.staticfiles',
     'django_plotly_dash.apps.DjangoPlotlyDashConfig',
-    'stocks.apps.StocksConfig', 'price.apps.PriceConfig'
+    'stocks.apps.StocksConfig', 'price.apps.PriceConfig',
+    'chip.apps.ChipConfig'
 ]
 
 MIDDLEWARE = [
