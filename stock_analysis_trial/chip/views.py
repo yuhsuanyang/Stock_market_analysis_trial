@@ -8,7 +8,6 @@ from django.shortcuts import render
 from stocks.models import StockMetaData
 from price.views import query_historical_price
 from .util import create_dash
-from dashboard_utils.common_functions import create_price_sequence
 
 meta_data = StockMetaData.objects.all()
 api = DataLoader()

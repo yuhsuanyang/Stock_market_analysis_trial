@@ -4,7 +4,7 @@
 {% block link_list%}
 <div id="here"><a href="{{stock_info.get_price_url}}">近期股價</a></div>
 <div><a href="{{stock_info.get_chip_url}}">籌碼分析</a></div>
-<div><a href="/montly_revenue">月營收表</a></div>
+<div><a href="{{stock_info.get_revenue_url}}">月營收表</a></div>
 {% endblock %} {% block same_trade %} {%for stock_name in same_trade%}
 <li>
   <a href="{{stock_name.get_price_url}}" target="_blank"
