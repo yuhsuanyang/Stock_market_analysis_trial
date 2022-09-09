@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+{% extends "base_dashboard.html" %} 
+{% load plotly_dash %} 
+{% block link_list%}
+<div><a href="{{stock_info.get_price_url}}">近期股價</a></div>
+<div id="here"><a href="{{stock_info.get_chip_url}}">籌碼分析</a></div>
+<div><a href="/montly_revenue">月營收表</a></div>
+{% endblock %} {% block same_trade %} {%for stock_name in same_trade%}
+<li>
+  <a href="{{stock_name.get_price_url}}" target="_blank"
+    ><font color="black">{{stock_name}}</font></a
+  >
+</li>
+{% endfor %} {% endblock %} {% block main_content %}
+<div id="dashboard" style="width: 100%">
+        <!--      <p>hello</p>-->
+    {% plotly_app name="Chip_Dashboard" ratio=1%}
+</div>
+{% endblock %}
+  </div>
+</div>

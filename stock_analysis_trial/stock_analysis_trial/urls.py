@@ -25,7 +25,7 @@ urlpatterns = [
     path('django_plotly_dash/', include('django_plotly_dash.urls')),
     path('index/', main, name='index'),
     path('analysis/', include('price.urls')),
-    #    path('analysis/', include('chip.urls')),
+    path('analysis/', include('chip.urls')),
     path(
         'css/styles.css',
         TemplateView.as_view(template_name='styles.css',

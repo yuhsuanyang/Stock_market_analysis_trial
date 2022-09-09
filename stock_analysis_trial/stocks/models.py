@@ -25,3 +25,6 @@ class StockMetaData(models.Model):
 
     def get_price_url(self):
         return reverse('price:dashboard', args=[self.code])
+
+    def get_chip_url(self):
+        return reverse('chip:dashboard', args=[self.code])

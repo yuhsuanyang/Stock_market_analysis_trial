@@ -48,8 +48,8 @@ def query_historical_price(stock_code, start_date, end_date):
 
 
 def main(request, stock_id):
-    data = {}
     info = meta_data.filter(code=stock_id)[0]
+    data = {'stock_info': info}
     today = datetime.today()
     start_date = datetime.strftime(today - timedelta(days=365 * 5), '%Y-%m-%d')
     end_date = datetime.strftime(today + timedelta(days=1), '%Y-%m-%d')

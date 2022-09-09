@@ -1,11 +1,12 @@
 import requests
 import numpy as np
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
 from FinMind.data import DataLoader
 from django.shortcuts import render
 from stocks.models import StockMetaData
+from price.views import query_historical_price
 from .util import create_dash
 from dashboard_utils.common_functions import create_price_sequence
 
@@ -50,6 +51,7 @@ def get_institutional(stock_code, start, end):
     raw_data = api.taiwan_stock_institutional_investors(stock_id=stock_code,
                                                         start_date=start,
                                                         end_date=end)
+    print(raw_data)
     data_group = {
         name: df_group.reset_index(drop=True)
         for name, df_group in raw_data.groupby(by='name')
@@ -72,9 +74,12 @@ def main(request, stock_id):
     info = meta_data.filter(code=stock_id)[0]
     same_trade = meta_data.filter(industry_type=info.industry_type)
     date, chip_df, total = download(stock_id)
-    institution_df = get_institutional(stock_id)
-    price = price_data.filter(code=stock_id).order_by('-date')
-    price_df = create_price_sequence(price)
+    institution_df = get_institutional(
+        stock_id, datetime.strftime(today - timedelta(days=90), '%Y-%m-%d'),
+        datetime.strftime(today, '%Y-%m-%d'))
+    price_df = query_historical_price(
+        stock_id, datetime.strftime(today - timedelta(days=90), '%Y-%m-%d'),
+        datetime.strftime(today, '%Y-%m-%d'))
     data = {}
     data['stock_id'] = f"{stock_id} {info.name}"
     data['listed_date'] = info.listed_date
